@@ -8,4 +8,6 @@ router.post('/signup', signup);
 router.post('/login', login);
 router.patch('/update/:id',verifyAdminToken,updateAdmin)
 router.delete('/delete/:id',verifyAdminToken,deleteAdmin)
+
+
 export default router;
