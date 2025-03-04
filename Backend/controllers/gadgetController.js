@@ -107,7 +107,7 @@ const getGadgetsByStatus = asyncHandler(async (req, res) => {
 
 
 const updateGadget = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { adminId } = req.user;
   const { name, status } = req.body;
 
   const gadget = await prisma.gadget.findUnique({ where: { id } });
@@ -123,25 +123,25 @@ const updateGadget = asyncHandler(async (req, res) => {
 });
 
 const deleteGadget = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { adminId } = req.user;
 
-  const gadget = await prisma.gadget.findUnique({ where: { id } });
-  if (!gadget || gadget.adminId !== req.user.id) {
+  const gadget = await prisma.gadget.findUnique({ where: { adminId } });
+  if (!gadget || gadget.adminId !== adminId) {
     return errorHandler(res, 'Unauthorized or gadget not found', 403);
   }
 
   const decommissionedGadget = await prisma.gadget.update({
-    where: { id },
+    where: { adminId },
     data: { status: 'Decommissioned', decommissionedAt: new Date() },
   });
   successHandler(res, decommissionedGadget, 'Gadget decommissioned successfully');
 });
 
 const selfDestruct = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { adminId } = req.user;
   const confirmationCode = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-  const gadget = await prisma.gadget.findUnique({ where: { id } });
+  const gadget = await prisma.gadget.findUnique({ where: { adminId } });
   if (!gadget || gadget.adminId !== req.user.id) {
     return errorHandler(res, 'Unauthorized or gadget not found', 403);
   }
