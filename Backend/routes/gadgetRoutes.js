@@ -4,6 +4,8 @@ import gadgetController from '../controllers/gadgetController.js';
 const router = express.Router();
 
 router.get('/get', gadgetController.getGadgets);
+router.get('/get/:adminId',gadgetController.getGadgetsByAdmin);
+
 router.post('/add', gadgetController.addGadget);
 router.get('/gadgets', gadgetController.getGadgetsByStatus);
 router.patch('/:id', gadgetController.updateGadget);

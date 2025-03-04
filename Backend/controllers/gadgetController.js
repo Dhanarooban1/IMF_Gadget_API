@@ -21,6 +21,17 @@ const getGadgets = asyncHandler(async (req, res) => {
   successHandler(res, gadgetsWithProbability);
 });
 
+const getGadgetsByAdmin = asyncHandler(async (req, res) => {
+  const { adminId } = req.params; 
+  const gadgets = await prisma.gadget.findMany({
+    where: { adminId },
+  });
+  if (gadgets.length === 0) {
+    return successHandler(res, [], 'No gadgets created by this admin');
+  }
+  successHandler(res, gadgets);
+});
+
 const addGadget = asyncHandler(async (req, res) => {
   const { name, status } = req.body;
   const newGadget = await prisma.gadget.create({
@@ -71,4 +82,4 @@ const selfDestruct = asyncHandler(async (req, res) => {
   successHandler(res, { destroyedGadget, confirmationCode }, 'Gadget self-destructed');
 });
 
-export default { getGadgets, addGadget, updateGadget, deleteGadget, selfDestruct ,getGadgetsByStatus };
+export default { getGadgets, addGadget, updateGadget, deleteGadget, selfDestruct ,getGadgetsByStatus,getGadgetsByAdmin };

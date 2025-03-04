@@ -38,17 +38,25 @@ const login = asyncHandler(async (req, res) => {
 
 
 const updateAdmin = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { username, password } = req.body;
+  const { adminId } = req.params;
+  const { name, email } = req.body;
 
-  const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
+  const admin = await prisma.admin.findUnique({
+    where: { id: adminId },
+  });
+
+  if (!admin) {
+    return res.status(404).json({ status: 'error', message: 'Admin not found' });
+  }
+
   const updatedAdmin = await prisma.admin.update({
-    where: { id },
-    data: { username, password: hashedPassword },
+    where: { id: adminId },
+    data: { name, email },
   });
 
   successHandler(res, updatedAdmin, 'Admin updated successfully');
 });
+
 
 const deleteAdmin = asyncHandler(async (req, res) => {
   const { id } = req.params;

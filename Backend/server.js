@@ -1,7 +1,7 @@
+import prisma from "./config/database.js";
 import cors from "cors";
 import { config } from "dotenv";
 import express from "express";
-
 import limiter from "./middleware/rateLimiter.js"
 import { verifyAdminToken } from "./middleware/authMiddleware.js";
 
