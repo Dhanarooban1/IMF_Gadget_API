@@ -67,14 +67,14 @@ npx prisma generate
 npm run dev
 ```
 
-The API will be running at `http://localhost:3000`
+The API will be running at `http://localhost:5000`
 
 ---
 
 ## 📚 API Documentation
 
 Use Postman or Swagger to test the endpoints:
-- **Base URL:** ` `
+- **Base URL:** `https://imf-gadget-api-kxga.onrender.com/`
 
 | Method | Endpoint                            | Description                      |
 |-------|-------------------------------------|----------------------------------|
