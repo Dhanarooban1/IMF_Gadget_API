@@ -1,0 +1,20 @@
+// -------------------------------------
+// 1. Prisma Generator & Datasource
+// -------------------------------------
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+   provider = "postgresql"
+   url      = env("DATABASE_URL")
+   directUrl = env("DIRECT_URL")
+}
+
+
+model Gadget {
+  id        String  @id @default(uuid())
+  name      String
+  status    String  @default("Available")
+  decommissionedAt DateTime?  
+}
