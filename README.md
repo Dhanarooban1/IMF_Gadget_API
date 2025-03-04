@@ -40,8 +40,8 @@ The **Phoenix: IMF Gadget API** is a secure RESTful API designed to manage the g
 
 1. **Clone the repository:**
 ```bash
-git clone <repository-url>
-cd Phoenix-IMF-Gadget-API
+git clone https://github.com/Dhanarooban1/IMF_Gadget_API.git
+cd Backend
 ```
 
 2. **Install dependencies:**
