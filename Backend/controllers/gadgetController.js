@@ -33,6 +33,15 @@ const addGadget = asyncHandler(async (req, res) => {
   successHandler(res, newGadget, 'Gadget added successfully', 201);
 });
 
+const getGadgetsByStatus = asyncHandler(async (req, res) => {
+  const { status } = req.query;
+  const gadgets = await prisma.gadget.findMany({
+    where: { status },
+  });
+  successHandler(res, gadgets);
+});
+
+
 const updateGadget = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { name, status } = req.body;
@@ -62,4 +71,4 @@ const selfDestruct = asyncHandler(async (req, res) => {
   successHandler(res, { destroyedGadget, confirmationCode }, 'Gadget self-destructed');
 });
 
-export default { getGadgets, addGadget, updateGadget, deleteGadget, selfDestruct };
+export default { getGadgets, addGadget, updateGadget, deleteGadget, selfDestruct ,getGadgetsByStatus };

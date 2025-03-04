@@ -89,7 +89,9 @@ Use Postman or Swagger to test the endpoints:
 
 ## 🚀 Deployment
 
-Deployed on **Render/Heroku/Railway** (Add link when deployed)
+Deployed on **Render** 
+
+- **Base URL:** `https://imf-gadget-api-kxga.onrender.com/`
 
 ---
 
