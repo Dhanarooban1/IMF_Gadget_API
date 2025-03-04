@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/gadgets',GadgetRoutes);
-
+// app.use('/auth', authRoutes);
 
 
 app.use((err, req, res, next) => {
