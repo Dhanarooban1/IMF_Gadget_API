@@ -1,19 +1,15 @@
+import prisma from "./config/database.js";
 import cors from "cors";
 import { config } from "dotenv";
 import express from "express";
-import prisma from "./config/database.js";
 
 import limiter from "./middleware/rateLimiter.js"
 import { verifyAdminToken } from "./middleware/authMiddleware.js";
 
 
 
-import memberRoutes from './routes/memberRoutes.js'
-import issuanceRoutes from './routes/issuanceRoutes.js'
-import bookRoutes from './routes/bookRoutes.js'
-import dashboardRouters from "./routes/dashboardRoutes.js";
-import reportRoutes from "./routes/reportRoutes.js"
-import adminRoutes from "./routes/adminRoutes.js"
+import GadgetRoutes from './routes/gadgetRoutes.js'
+
 config();
 
 const PORT = Number(process.env.PORT);
@@ -30,12 +26,9 @@ app.get("/", (req, res) => {
   res.send("Phoenix Gadget API is running!");
 });
 
-app.use('/api/admin',adminRoutes)
-app.use('/api/members', verifyAdminToken, memberRoutes);
-app.use('/api/books', verifyAdminToken, bookRoutes);
-app.use('/api/issuances', verifyAdminToken, issuanceRoutes);
-app.use('/api/dashboard', verifyAdminToken, dashboardRouters);
-app.use('/api/report', verifyAdminToken, reportRoutes);
+app.use('/api/gadgets',GadgetRoutes);
+
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
