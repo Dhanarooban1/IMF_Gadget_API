@@ -3,7 +3,7 @@ import gadgetController from '../controllers/gadgetController.js';
 
 const router = express.Router();
 
-router.get('/', gadgetController.getGadgets);
+router.get('/get', gadgetController.getGadgets);
 router.post('/add', gadgetController.addGadget);
 router.patch('/:id', gadgetController.updateGadget);
 router.delete('/:id', gadgetController.deleteGadget);
