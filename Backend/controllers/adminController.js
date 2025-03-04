@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 const signup = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
-  
+
   const adminExists = await prisma.admin.findUnique({ where: { username } });
   if (adminExists) {
     res.status(400);
@@ -34,6 +34,8 @@ const login = asyncHandler(async (req, res) => {
     throw new Error('Invalid username or password');
   }
 });
+
+
 
 const updateAdmin = asyncHandler(async (req, res) => {
   const { id } = req.params;

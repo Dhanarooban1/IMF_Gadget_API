@@ -1,5 +1,5 @@
-import prisma from "./config/database.js";
-// import cors from "cors";
+
+import cors from "cors";
 import { config } from "dotenv";
 import express from "express";
 
@@ -16,7 +16,7 @@ const PORT = Number(process.env.PORT);
 
 const app = express();
 
-// app.use(cors());
+app.use(cors());
 
 app.use(express.json());
 app.use(limiter);
@@ -27,8 +27,8 @@ app.get("/", (req, res) => {
 });
 
 
-app.use('api/admin',AdminRouter);
-app.use('/api/gadgets',GadgetRoutes);
+app.use('/api/admin',AdminRouter);
+app.use('/api/gadgets',verifyAdminToken,GadgetRoutes);
 
 
 
