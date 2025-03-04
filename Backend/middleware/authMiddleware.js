@@ -8,7 +8,7 @@ export const generateToken = (adminId) =>
 
 
 export const verifyAdminToken = (req, res, next) => {
-  const token = req.headers.Authorization; 
+  const token = req.headers; 
  
   if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
 
