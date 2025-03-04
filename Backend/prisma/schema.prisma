@@ -1,6 +1,4 @@
-// -------------------------------------
-// 1. Prisma Generator & Datasource
-// -------------------------------------
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,9 +10,18 @@ datasource db {
 }
 
 
+model Admin {
+  id       String   @id @default(uuid())
+  username String   @unique
+  password String
+  gadgets  Gadget[] 
+}
+
 model Gadget {
-  id        String  @id @default(uuid())
-  name      String
-  status    String  @default("Available")
-  decommissionedAt DateTime?  
+  id              String   @id @default(uuid())
+  name            String
+  status          String   @default("Available")
+  decommissionedAt DateTime?
+  adminId         String?
+  admin           Admin?    @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
