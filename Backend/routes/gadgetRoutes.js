@@ -3,13 +3,14 @@ import gadgetController from '../controllers/gadgetController.js';
 
 const router = express.Router();
 
-router.get('/get', gadgetController.getGadgets);
-router.post('/add', gadgetController.addGadget);
-router.patch('/update/:gadgetid', gadgetController.updateGadget);
-router.delete('/delete/:gadgetid', gadgetController.deleteGadget);
+router.get('/', gadgetController.getGadgets);
+router.post('/', gadgetController.addGadget);
 
-router.get('/get/admin',gadgetController.getGadgetsByAdmin);
-router.get('/status/:status', gadgetController.getGadgetsByStatus);
-router.post('/self-destruct/:gadgetid', gadgetController.selfDestruct);
+router.patch('/:gadgetid', gadgetController.updateGadget);
+router.delete('/:gadgetid', gadgetController.deleteGadget);
+
+router.get('/admin',gadgetController.getGadgetsByAdmin);
+router.get('/:status', gadgetController.getGadgetsByStatus);
+router.post('/:gadgetid/self-destruct', gadgetController.selfDestruct);
 
 export default router;
