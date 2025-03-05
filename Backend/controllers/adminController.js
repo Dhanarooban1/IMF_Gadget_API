@@ -45,7 +45,7 @@ const login = asyncHandler(async (req, res) => {
 const updateAdmin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   const { adminId } = req.user;
-  if(!admin){
+  if(!adminId){
     throw new Error('No adminId recived from token');
   }
   const admin = await prisma.admin.findUnique({ where: { id: adminId } });
