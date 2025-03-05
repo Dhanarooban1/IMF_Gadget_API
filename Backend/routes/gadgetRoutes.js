@@ -7,9 +7,9 @@ router.get('/get', gadgetController.getGadgets);
 router.get('/get/admin',gadgetController.getGadgetsByAdmin);
 
 router.post('/add', gadgetController.addGadget);
-router.get('/status', gadgetController.getGadgetsByStatus);
-router.patch('/:id', gadgetController.updateGadget);
-router.delete('/:id', gadgetController.deleteGadget);
-router.post('/:id/self-destruct', gadgetController.selfDestruct);
+router.get('/status/:status', gadgetController.getGadgetsByStatus);
+router.patch('/update', gadgetController.updateGadget);
+router.delete('/delete', gadgetController.deleteGadget);
+router.post('/self-destruct', gadgetController.selfDestruct);
 
 export default router;

@@ -38,9 +38,8 @@ const login = asyncHandler(async (req, res) => {
 
 
 const updateAdmin = asyncHandler(async (req, res) => {
-  const { adminId } = req.params;
-  const { name, email } = req.body;
-
+  const { username, password  } = req.body;
+  const { adminId } = req.user;
   const admin = await prisma.admin.findUnique({
     where: { id: adminId },
   });
@@ -51,7 +50,7 @@ const updateAdmin = asyncHandler(async (req, res) => {
 
   const updatedAdmin = await prisma.admin.update({
     where: { id: adminId },
-    data: { name, email },
+    data: { username, password },
   });
 
   successHandler(res, updatedAdmin, 'Admin updated successfully');
@@ -59,7 +58,8 @@ const updateAdmin = asyncHandler(async (req, res) => {
 
 
 const deleteAdmin = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { adminId } = req.user;
+  const id = adminId;
   await prisma.admin.delete({ where: { id } });
   successHandler(res, null, 'Admin deleted successfully');
 });

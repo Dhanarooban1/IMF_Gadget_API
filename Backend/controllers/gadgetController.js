@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import asyncHandler from '../middleware/asyncHandler.js';
-import { successHandler,errorHandler } from '../middleware/responseHandler.js';
+import { successHandler, errorHandler } from '../middleware/responseHandler.js';
 
 const prisma = new PrismaClient();
 
@@ -23,7 +23,7 @@ const getGadgets = asyncHandler(async (req, res) => {
     },
   });
 
-  const gadgetsWithCreatedBy = gadgets.map(({ adminId,admin, ...gadget }) => ({
+  const gadgetsWithCreatedBy = gadgets.map(({ adminId, admin, ...gadget }) => ({
     ...gadget,
     createdBy: admin ? admin.username : 'Unknown',
     successProbability: generateSuccessProbability(),
@@ -62,17 +62,19 @@ const getGadgetsByAdmin = asyncHandler(async (req, res) => {
 
 
 const addGadget = asyncHandler(async (req, res) => {
-  const { name, status,  } = req.body;
-  const {adminId} = req.user;
+  const { name, status } = req.body;
+  const { adminId } = req.user;
+
   if (!adminId) {
     return errorHandler(res, 'Admin ID is required', 400);
   }
-  
+
   const admin = await prisma.admin.findUnique({
     where: { id: adminId },
   });
 
   if (!admin) {
+    console.log("no")
     return errorHandler(res, 'Admin not found', 404);
   }
 
@@ -82,7 +84,7 @@ const addGadget = asyncHandler(async (req, res) => {
       id: uuidv4(),
       name: name || generateRandomCodename(),
       status: status || 'Available',
-      adminId: admin.id, 
+      adminId: admin.id,
     },
   });
 
@@ -92,12 +94,18 @@ const addGadget = asyncHandler(async (req, res) => {
 
 
 const getGadgetsByStatus = asyncHandler(async (req, res) => {
-  const { status } = req.query;
+  const { status } = req.params;
+
   if (!status) {
     return errorHandler(res, 'Status query parameter is required', 400);
   }
   const gadgets = await prisma.gadget.findMany({
-    where: { status },
+    where: {
+      status: {
+        equals: status.toLowerCase(),
+        mode: 'insensitive',
+      },
+    },
   });
   successHandler(res, gadgets);
 });
@@ -108,10 +116,9 @@ const getGadgetsByStatus = asyncHandler(async (req, res) => {
 
 const updateGadget = asyncHandler(async (req, res) => {
   const { adminId } = req.user;
-  const { name, status } = req.body;
-
+  const { name, status, gadgetid:id } = req.body;
   const gadget = await prisma.gadget.findUnique({ where: { id } });
-  if (!gadget || gadget.adminId !== req.user.id) {
+  if (!gadget || gadget.adminId !== adminId) {
     return errorHandler(res, 'Unauthorized or gadget not found', 403);
   }
 
@@ -124,25 +131,28 @@ const updateGadget = asyncHandler(async (req, res) => {
 
 const deleteGadget = asyncHandler(async (req, res) => {
   const { adminId } = req.user;
+  const { gadgetid: id } = req.body;
 
-  const gadget = await prisma.gadget.findUnique({ where: { adminId } });
+  const gadget = await prisma.gadget.findUnique({ where: { id } });
   if (!gadget || gadget.adminId !== adminId) {
     return errorHandler(res, 'Unauthorized or gadget not found', 403);
   }
 
   const decommissionedGadget = await prisma.gadget.update({
-    where: { adminId },
+    where: { id },
     data: { status: 'Decommissioned', decommissionedAt: new Date() },
   });
+
   successHandler(res, decommissionedGadget, 'Gadget decommissioned successfully');
 });
 
 const selfDestruct = asyncHandler(async (req, res) => {
   const { adminId } = req.user;
+  const { gadgetid: id } = req.body; 
   const confirmationCode = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-  const gadget = await prisma.gadget.findUnique({ where: { adminId } });
-  if (!gadget || gadget.adminId !== req.user.id) {
+  const gadget = await prisma.gadget.findUnique({ where: { id } });
+  if (!gadget || gadget.adminId !== adminId) {
     return errorHandler(res, 'Unauthorized or gadget not found', 403);
   }
 
@@ -150,9 +160,10 @@ const selfDestruct = asyncHandler(async (req, res) => {
     where: { id },
     data: { status: 'Destroyed' },
   });
+
   successHandler(res, { destroyedGadget, confirmationCode }, 'Gadget self-destructed');
 });
 
 
 
-export default { getGadgets, addGadget, updateGadget, deleteGadget, selfDestruct ,getGadgetsByStatus,getGadgetsByAdmin };
+export default { getGadgets, addGadget, updateGadget, deleteGadget, selfDestruct, getGadgetsByStatus, getGadgetsByAdmin };
