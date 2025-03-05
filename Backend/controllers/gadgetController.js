@@ -74,7 +74,7 @@ const addGadget = asyncHandler(async (req, res) => {
   });
 
   if (!admin) {
-    console.log("no")
+
     return errorHandler(res, 'Admin not found', 404);
   }
 

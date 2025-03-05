@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import express from "express";
 import limiter from "./middleware/rateLimiter.js"
 import { verifyAdminToken } from "./middleware/authMiddleware.js";
+import {errorHandler} from "./middleware/responseHandler.js"
 
 
 import AdminRouter from './routes/adminRouters.js'
@@ -31,13 +32,7 @@ app.use('/api/gadgets',verifyAdminToken,GadgetRoutes);
 
 
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    success: false,
-    message: 'Something went wrong!'
-  });
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`App is running at http://localhost:${PORT}`);
