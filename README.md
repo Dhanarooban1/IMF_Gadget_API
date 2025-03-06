@@ -111,5 +111,5 @@ For any queries, feel free to connect:
 
 ---
 
-Good luck, agent! This README will not self-destruct... but your gadgets might! 💥
+
 
